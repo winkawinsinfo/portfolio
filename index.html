@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ace of Space — Design–Build Interior Studio (Option B · Video Scrub)</title>
+<meta name="description" content="Ace of Space is a design–build interior studio. We carry every project from design development through construction and handover — one team, one accountability.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Trirong:wght@400;500&family=Inter:wght@400;500;600&family=Anuphan:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  /* ---- TEMP: mockup preview overrides (remove when swapping real assets in) ---- */
+  .brand .logo-slot{ background:transparent; border:0; width:auto; height:28px; padding:0; }
+  .brand .logo-slot img{ height:28px; width:auto; display:block; }
+  .layer-hero .ph.cover, .layer-scope .ph.cover{ display:none; }
+  .mock-photo{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+  .mock-tag{
+    position:absolute; left:16px; bottom:16px; z-index:3;
+    font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--paper); background:rgba(62,50,42,.55); padding:4px 10px; border-radius:2px;
+  }
+  .layer-video{ z-index:8; }
+  .layer-video video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+
+  /* runway: S1 pacing kept, the S2→S3 tail compressed to ~1 viewport */
+  .scene{ height:360vh; }
+
+  .works{ padding-top:96px; }
+
+  /* single-line EN headlines over footage — one white drop shadow,
+     45° toward bottom-right, 8px */
+  .hero-copy h1, .scope-copy h2, .principle h2{
+    text-shadow:4px 4px 8px rgba(255,255,255,.6);
+  }
+  @media (min-width:901px){
+    .hero-copy h1, .scope-copy h2{ white-space:nowrap; }
+  }
+  .scope-copy{ max-width:780px; }
+  .scope-copy h2{ font-size:clamp(30px, 3.9vw, 58px); }
+
+  /* -- 1. logo: dead-center of S1, white wordmark / orange "of" -- */
+  .hero-copy h1{ font-size:clamp(34px, 4.4vw, 64px); }   /* one line, supporting the logo */
+  .hero-copy{ max-width:none; }
+  .hero-copy .sub{ max-width:420px; }
+  .hero-logo-center{
+    position:absolute; z-index:3;
+    left:50%; top:50%; transform:translate(-50%,-50%);
+    width:clamp(255px, 25.5vw, 390px); height:auto;      /* 150% of previous size */
+    will-change:opacity;
+  }
+  .site-head .brand{ opacity:0; }                    /* JS crossfades it in as hero fades */
+  body.reduced .site-head .brand{ opacity:1; }
+  .brand .logo-slot img{ height:40px; }
+
+  /* -- 2. principles: circle image placeholder + whole block centered -- */
+  .principle{ justify-content:center; }
+  .principle-inner{
+    max-width:660px; margin-inline:auto;
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center;
+  }
+  .ph-circle{
+    width:clamp(150px, 17vw, 210px); aspect-ratio:1/1;
+    border-radius:50%; margin-bottom:30px;
+  }
+  .principle .num{ margin-bottom:14px; }
+  .principle p{ max-width:560px; margin-inline:auto; }
+
+  /* -- 3. S2→S3 exit: gradient-topped paper panel — no visible seam.
+        The panel is 170vh tall; its top 55vh is a gradient from fully
+        transparent to solid paper, so the leading edge never draws a line.
+        By the end of the travel the solid region fills the viewport. -- */
+  .layer-wipe{
+    clip-path:none !important;
+    top:0; height:170%;
+    background:linear-gradient(to bottom,
+      rgba(244,240,233,0)    0%,
+      rgba(244,240,233,.28) 12%,
+      rgba(244,240,233,.72) 24%,
+      #F4F0E9               33%,
+      #F4F0E9              100%);
+    transform:translateY(103%);
+  }
+
+  /* -- 4. editorial grid (ref: Read / Design & Lifestyle) -- */
+  .works-head-ref{ margin-bottom:40px; }   /* thumbnails sit tight under the heading */
+  .works-head-ref h2{ font-family:var(--font-display); font-weight:600; font-size:30px; color:var(--ink); line-height:1.15; }
+  .works-head-ref p{ font-family:var(--font-display); font-weight:400; font-size:26px; color:var(--body); line-height:1.25; }
+  .works-head-ref .th-whisper{ font-family:'Anuphan',sans-serif; font-size:13px; margin-top:10px; }
+  .works-grid3{ display:grid; grid-template-columns:repeat(3,1fr); column-gap:24px; row-gap:72px; }
+  .card3{ display:block; }
+  .frame3{ overflow:hidden; border-radius:2px; }
+  .frame3 img{ width:100%; aspect-ratio:4/5; object-fit:cover; display:block;
+               transition:transform .7s cubic-bezier(.25,.6,.3,1); }
+  .card3:hover .frame3 img{ transform:scale(1.04); }
+  .card3 h3{ font-family:var(--font-display); font-weight:500; font-size:25px; color:var(--ink); margin-top:20px; line-height:1.15; }
+  .card3-sub{ font-family:var(--font-display); font-size:15px; color:var(--body); margin-top:6px; }
+  .card3-th{ font-size:12.5px; margin-top:4px; }
+  .card3-meta{ margin-top:12px; font-size:10px; }
+  @media (max-width:900px){
+    .works-grid3{ grid-template-columns:1fr; row-gap:56px; }
+    .works-head-ref h2, .works-head-ref p{ font-size:24px; }
+  }
+</style>
+<!--
+  NOTE FOR PRODUCTION:
+  - เมื่อใส่ภาพจริงแทน placeholder (HERO-01 / SCOPE-01) พื้นภาพจะเป็นโทนเข้ม
+    ให้เปลี่ยนสีตัวอักษรบน S1–S2 เป็น #F4F0E9 (เพิ่ม class .on-photo ได้)
+  - ทุก placeholder ตั้งชื่อตามรหัสใน Brief.md เช่น <img src="assets/img/HERO-01.jpg">
+-->
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="site-head">
+  <a class="brand" id="headBrand" href="index-video.html">
+    <span class="logo-slot"><img src="assets/img/logo-ink.svg" alt="Ace of Space"></span>
+  </a>
+  <nav class="site-nav">
+    <a href="#works">Projects</a>
+    <a href="#approach">Approach</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<!-- ================= SCROLL SCENE : S1 → S2 → WIPE ================= -->
+<div class="scene" id="scene">
+  <div class="stage">
+
+    <!-- S1+S2 : ONE CONTINUOUS SHOT — scroll-scrubbed video (Option B) -->
+    <div class="layer layer-video">
+      <video id="zoomVideo" muted playsinline preload="auto">
+        <source src="assets/video/S1-S2-scrub.mp4" type="video/mp4">
+        <source src="assets/video/S1-S2-scrub.webm" type="video/webm">
+      </video>
+      <span class="mock-tag">Mockup · Video S1&#8594;S2 (scroll-scrubbed)</span>
+    </div>
+
+    <!-- S1 copy overlay -->
+    <div class="layer layer-hero" id="approach" style="background:transparent">
+
+      <span class="vert-meta">Design–Build Interior Studio · Bangkok</span>
+
+      <img class="hero-logo-center" src="assets/img/logo-white.svg" alt="Ace of Space">
+
+      <div class="hero-copy">
+        <h1 class="display">Craft is in the Joint</h1>
+        <p class="th-whisper">งานฝีมืออยู่ที่รอยต่อ</p>
+        <p class="sub">Ace of Space is a design–build interior studio. We obsess over
+        the smallest seam, because the smallest seam is where a space succeeds or fails.</p>
+      </div>
+
+      <div class="hero-scroll-hint">
+        <span class="label">Scroll</span><span class="tick"></span>
+      </div>
+    </div>
+
+    <!-- S1 : PRINCIPLES (pinned, สลับทีละข้อ) -->
+    <div class="layer layer-principles">
+
+      <div class="principle">
+        <div class="principle-inner">
+          <figure class="ph ph-circle">
+            <span class="ph-code">PRIN-01</span>
+            <span class="ph-spec">JPG · 800 × 800 · 1:1 · วงกลม</span>
+          </figure>
+          <span class="num">01 — PRINCIPLE</span>
+          <h2 class="display">Precision in Detail</h2>
+          <p class="p-th">ออกแบบโดยเริ่มจากสิ่งที่เล็กที่สุด — ระยะ รอยต่อ การจัดวาง และข้อจำกัดตามธรรมชาติของวัสดุแต่ละชนิด เพราะแบบที่ดีไม่ใช่แบบที่สวยบนกระดาษ แต่คือแบบที่สร้างได้จริงโดยไม่ต้องประนีประนอมหน้างาน</p>
+        </div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-inner">
+          <figure class="ph ph-circle">
+            <span class="ph-code">PRIN-02</span>
+            <span class="ph-spec">JPG · 800 × 800 · 1:1 · วงกลม</span>
+          </figure>
+          <span class="num">02 — PRINCIPLE</span>
+          <h2 class="display">Material Integrity</h2>
+          <p class="p-th">เลือกใช้วัสดุคุณภาพสูงสุดในแต่ละหมวด และก่อสร้างด้วยกรรมวิธีดั้งเดิมที่ถูกต้องตามธรรมชาติของวัสดุนั้น ไม่ลดสเปค ไม่ข้ามขั้นตอน ไม่เร่งกระบวนการที่ต้องใช้เวลา — เพราะงานที่ทำถูกตั้งแต่ต้น คืองานที่ไม่ต้องกลับมาแก้</p>
+        </div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-inner">
+          <figure class="ph ph-circle">
+            <span class="ph-code">PRIN-03</span>
+            <span class="ph-spec">JPG · 800 × 800 · 1:1 · วงกลม</span>
+          </figure>
+          <span class="num">03 — PRINCIPLE</span>
+          <h2 class="display">Three Decades of Craft</h2>
+          <p class="p-th">ทีมช่างก่อสร้างที่ทำงานร่วมกันต่อเนื่องกว่า 30 ปี ผ่านงานหลากหลายประเภทและหลากหลายวัสดุ ประสบการณ์นี้คือหลักประกันว่า สิ่งที่เห็นในแบบ คือสิ่งที่จะเกิดขึ้นจริงหน้างาน</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- S2 : SCOPE copy overlay (video ends on the wide interior) -->
+    <div class="layer layer-scope" style="background:transparent">
+      <div class="scope-scrim" aria-hidden="true"></div>
+      <div class="scope-copy">
+        <span class="label">Scope of Works</span>
+        <h2 class="display">From First Line to Final Joint</h2>
+        <p class="th-whisper">จากเส้นแรกบนแบบ ถึงรอยต่อสุดท้ายหน้างาน</p>
+        <p class="en">We carry every project from design development through construction
+        and handover — one team, one accountability.</p>
+        <p class="th">เมื่อผู้ออกแบบและผู้ก่อสร้างคือทีมเดียวกัน ความคลาดเคลื่อนจากการสื่อสารระหว่าง
+        interior designer และ contractor จะหายไป งานแก้ที่ไม่จำเป็นลดลง
+        และเจ้าของโครงการไม่ต้องจ่ายให้กับต้นทุนแฝงที่เกิดจากการตีความแบบผิด —
+        สิ่งที่ตกลงกันไว้ในแบบ คือสิ่งที่ได้รับหน้างาน ทั้งงบประมาณและระยะเวลา</p>
+        <div class="scope-steps">
+          <span>Design Development</span>
+          <span>Construction</span>
+          <span>Handover &amp; Aftercare</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXIT PANEL -->
+    <div class="layer layer-wipe" aria-hidden="true"></div>
+
+  </div>
+</div>
+
+<!-- ================= S3 : PROJECT INDEX ================= -->
+<section class="works" id="works">
+  <div class="wrap">
+
+    <div class="works-head-ref reveal">
+      <h2>Selected Works</h2>
+      <p>Design &amp; Construction</p>
+      <p class="th-whisper">ผลงานที่ผ่านมา — ออกแบบและก่อสร้างโดยทีมเดียวกันทุกตารางเมตร</p>
+    </div>
+
+    <div class="works-grid3">
+
+      <a class="card3 reveal" href="projects/sdc-office.html">
+        <div class="frame3"><img src="assets/img/IDX-01.jpg" alt="SDC Office" loading="lazy"></div>
+        <h3>SDC Office</h3>
+        <p class="card3-sub">A workspace built around focus and flow</p>
+        <p class="card3-th th-whisper">สำนักงาน เอสดีซี</p>
+        <p class="label card3-meta">Office &nbsp;·&nbsp; 20––</p>
+      </a>
+
+      <a class="card3 reveal" href="projects/chiangrai-resort.html">
+        <div class="frame3"><img src="assets/img/IDX-02.jpg" alt="Chiang Rai Resort" loading="lazy"></div>
+        <h3>Chiang Rai Resort</h3>
+        <p class="card3-sub">Northern calm, crafted room by room</p>
+        <p class="card3-th th-whisper">รีสอร์ท เชียงราย</p>
+        <p class="label card3-meta">Hospitality &nbsp;·&nbsp; 20––</p>
+      </a>
+
+      <a class="card3 reveal" href="projects/bangna-house.html">
+        <div class="frame3"><img src="assets/img/IDX-03.jpg" alt="Bangna House" loading="lazy"></div>
+        <h3>Bangna House</h3>
+        <p class="card3-sub">A family home tailored to daily rituals</p>
+        <p class="card3-th th-whisper">บ้านพักอาศัย บางนา</p>
+        <p class="label card3-meta">Residence &nbsp;·&nbsp; 20––</p>
+      </a>
+
+      <a class="card3 reveal" href="projects/khunyai-house.html">
+        <div class="frame3"><img src="assets/img/IDX-04.jpg" alt="Khunyai House" loading="lazy"></div>
+        <h3>Khunyai House</h3>
+        <p class="card3-sub">A house that keeps three generations close</p>
+        <p class="card3-th th-whisper">บ้านคุณยาย</p>
+        <p class="label card3-meta">Residence &nbsp;·&nbsp; 20––</p>
+      </a>
+
+      <a class="card3 reveal" href="projects/rama2-house.html">
+        <div class="frame3"><img src="assets/img/IDX-05.jpg" alt="Rama II House" loading="lazy"></div>
+        <h3>Rama II House</h3>
+        <p class="card3-sub">Quiet materials for a full-speed city life</p>
+        <p class="card3-th th-whisper">บ้านพักอาศัย พระราม 2</p>
+        <p class="label card3-meta">Residence &nbsp;·&nbsp; 20––</p>
+      </a>
+
+      <a class="card3 reveal" href="projects/khaoyai-house.html">
+        <div class="frame3"><img src="assets/img/IDX-06.jpg" alt="Khao Yai House" loading="lazy"></div>
+        <h3>Khao Yai House</h3>
+        <p class="card3-sub">A weekend retreat facing the mountain air</p>
+        <p class="card3-th th-whisper">บ้านพักตากอากาศ เขาใหญ่</p>
+        <p class="label card3-meta">Residence &nbsp;·&nbsp; 20––</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-foot" id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <p class="foot-brand">Ace of Space</p>
+        <p class="foot-close">“Every space deserves an ace.”</p>
+        <p class="th-whisper">ทุกสเปซควรได้มือหนึ่ง <span class="label">· TXT-FOOTER-02</span></p>
+      </div>
+      <div class="ph-text">
+        <span class="ph-code">TXT-FOOTER-01</span>
+        <p>ที่อยู่ · โทร · อีเมล · LINE ID · Instagram / Facebook</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="label">© 2026 Ace of Space — Design–Build Interior Studio</span>
+      <span class="label">Bangkok, Thailand</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main-video.js"></script>
+</body>
+</html>
